@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package omsgateway;
+
+message ReadyMessage {
+  string component = 1;
+  string status = 2;
+  string detail = 3;
+  int64 ts_ms = 4;
+}
+
+enum ActionType {
+  ACTION_UNSPECIFIED = 0;
+  ACTION_NEW = 1;
+  ACTION_MODIFY_PRICE = 2;
+  ACTION_CANCEL = 3;
+}
+
+message OrderCommand {
+  string cmd_id = 1;
+  ActionType action = 2;
+  string oms_id = 3;
+  string symbol = 4;
+  string side = 5;
+  int32 quantity = 6;
+  double price = 7;
+  string gateway = 8;
+  string account = 9;
+}
+
+message OrderEvent {
+  string event_id = 1;
+  string oms_id = 2;
+  string event_source = 3;
+  string event_type = 4;
+  string symbol = 5;
+  string side = 6;
+  int32 quantity = 7;
+  double price = 8;
+  string gateway = 9;
+  string account = 10;
+  string broker_order_id = 11;
+  int64 event_time_ms = 12;
+  string message = 13;
+}
+
+message GatewayFrame {
+  oneof payload {
+    ReadyMessage ready = 1;
+    OrderCommand command = 2;
+    OrderEvent event = 3;
+  }
+}
+
+service GatewayBridge {
+  rpc Connect(stream GatewayFrame) returns (stream GatewayFrame);
+}

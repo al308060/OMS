@@ -1,0 +1,5 @@
+grpcio>=1.66.0
+grpcio-tools>=1.66.0
+websockets>=12.0
+python-dotenv>=1.0.1
+shioaji>=1.2.8
